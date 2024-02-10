@@ -22,10 +22,12 @@
  */
 function getIntervalArray(start, end) {
   const arr = [];
-  for (let i = start; i <= end; i += 1) {
-    arr.push(i);
-  }
-  return arr;
+  arr.length = end - start + 1;
+  arr.fill(0);
+  const arr2 = arr.map((elem, index) => {
+    return start + index;
+  });
+  return arr2;
 }
 
 /**
@@ -69,13 +71,7 @@ function sumArrays(arr1, arr2) {
  *    findElement([0, 1, 2, 3, 4, 5], 5) => 5
  */
 function findElement(arr, value) {
-  let x = -1;
-  arr.forEach((element, index) => {
-    if (element === value) {
-      x = index;
-    }
-  });
-  return x;
+  return arr.indexOf(value);
 }
 
 /**
@@ -113,13 +109,8 @@ function findAllOccurrences(arr, item) {
  *    removeFalsyValues([ false, 0, NaN, '', undefined ]) => [ ]
  */
 function removeFalsyValues(arr) {
-  const arrCopy = [];
-  arr.forEach((element) => {
-    if (element) {
-      arrCopy.push(element);
-    }
-  });
-  return arrCopy;
+  const result = arr.filter((elem) => elem);
+  return result;
 }
 
 /**
@@ -133,10 +124,7 @@ function removeFalsyValues(arr) {
  *    getStringsLength([ 'angular', 'react', 'ember' ]) => [ 7, 5, 5 ]
  */
 function getStringsLength(arr) {
-  const stringArr = [];
-  arr.forEach((element) => {
-    stringArr.push(element.length);
-  });
+  const stringArr = arr.map((elem) => elem.length);
   return stringArr;
 }
 
@@ -174,18 +162,10 @@ function getAverage(arr) {
  *    isSameLength(['cat', 'dog', 'elephant']) => false
  */
 function isSameLength(arr) {
-  let check = true;
-  const arrCopy = arr.map((element, index) => {
-    if (
-      String(element).length !== String(arr[index + 1]).length &&
-      index + 1 < arr.length
-    ) {
-      check = false;
-    }
-    return check;
-  });
-  arrCopy.push(check);
-  return check;
+  const result = arr.every(
+    (elem) => String(elem).length === String(arr[0]).length
+  );
+  return result;
 }
 
 /**
@@ -200,13 +180,9 @@ function isSameLength(arr) {
  *    isValueEqualsIndex([10, 20, 30, 40, 50]) => false
  */
 function isValueEqualsIndex(arr) {
-  let check = false;
-  arr.forEach((element, index) => {
-    if (element === index) {
-      check = true;
-    }
-  });
-  return check;
+  const result = arr.filter((elem, index) => elem === index);
+  if (result.length) return true;
+  return false;
 }
 
 /**
@@ -285,8 +261,8 @@ function doubleArray(arr) {
  *    toStringList([1, 2, 3, 4, 5]) => '1,2,3,4,5'
  *    toStringList(['rock', 'paper', 'scissors']) => 'rock,paper,scissors'
  */
-function toStringList(/* arr */) {
-  throw new Error('Not implemented');
+function toStringList(arr) {
+  return arr.join(',');
 }
 
 /**
@@ -301,8 +277,14 @@ function toStringList(/* arr */) {
  *   distinct([ 1, 1, 2, 2, 3, 3, 4, 4]) => [ 1, 2, 3, 4]
  *   distinct([]) => []
  */
-function distinct(/* arr */) {
-  throw new Error('Not implemented');
+function distinct(arr) {
+  const arrCopy = [];
+  arr.forEach((element) => {
+    if (!arrCopy.includes(element)) {
+      arrCopy.push(element);
+    }
+  });
+  return arrCopy;
 }
 
 /**
@@ -333,8 +315,8 @@ function createNDimensionalArray(/* n, size */) {
  *    flattenArray(['a', ['b', ['c', 'd'], 'e'], 'f']) => ['a', 'b', 'c', 'd', 'e', 'f']
  *    flattenArray([1, 2, 3, 4]) => [1, 2, 3, 4]
  */
-function flattenArray(/* nestedArray */) {
-  throw new Error('Not implemented');
+function flattenArray(nestedArray) {
+  return nestedArray.flat(Infinity);
 }
 
 /**
@@ -350,8 +332,8 @@ function flattenArray(/* nestedArray */) {
  *   selectMany([[1, 2], [3, 4], [5, 6]], (x) => x) =>   [ 1, 2, 3, 4, 5, 6 ]
  *   selectMany(['one','two','three'], (x) => x.split('')) =>   ['o','n','e','t','w','o','t','h','r','e','e']
  */
-function selectMany(/* arr, childrenSelector */) {
-  throw new Error('Not implemented');
+function selectMany(arr, childrenSelector) {
+  return arr.flatMap(childrenSelector);
 }
 
 /**
