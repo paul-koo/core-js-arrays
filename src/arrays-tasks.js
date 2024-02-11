@@ -349,8 +349,18 @@ function selectMany(arr, childrenSelector) {
  *   calculateBalance([ [ 10, 8 ], [ 1, 5 ] ])  => (10 - 8) + (1 - 5) = 2 + -4 = -2
  *   calculateBalance([]) => 0
  */
-function calculateBalance(/* arr */) {
-  throw new Error('Not implemented');
+function calculateBalance(arr) {
+  const initialValue = 0;
+  const copyArr = arr.reduce((accumul, currentValue) => {
+    let copyCurrentValue = [...currentValue];
+    if (Array.isArray(currentValue)) {
+      copyCurrentValue = currentValue.reduce((accum, value) => {
+        return accum - value;
+      });
+    }
+    return accumul + copyCurrentValue;
+  }, initialValue);
+  return copyArr;
 }
 
 /**
@@ -381,8 +391,17 @@ function createChunks(/* arr, chunkSize */) {
  *    generateOdds(2) => [ 1, 3 ]
  *    generateOdds(5) => [ 1, 3, 5, 7, 9 ]
  */
-function generateOdds(/* len */) {
-  throw new Error('Not implemented');
+function generateOdds(len) {
+  let counter = 1;
+  const newArr = [];
+  newArr.length = len;
+  newArr.fill(0);
+  const copyArr = newArr.map((element) => {
+    const result = counter + element;
+    counter += 2;
+    return result;
+  });
+  return copyArr;
 }
 
 /**
@@ -413,8 +432,9 @@ function getElementByIndices(/* arr, indices */) {
  *  getFalsyValuesCount([ -1, 'false', null, 0 ]) => 2
  *  getFalsyValuesCount([ null, undefined, NaN, false, 0, '' ]) => 6
  */
-function getFalsyValuesCount(/* arr */) {
-  throw new Error('Not implemented');
+function getFalsyValuesCount(arr) {
+  const copyArr = arr.filter((elem) => !elem);
+  return copyArr.length;
 }
 
 /**
@@ -450,8 +470,16 @@ function getIdentityMatrix(/* n */) {
  *    getIndicesOfOddNumbers([2, 4, 6, 8, 10]) => []
  *    getIndicesOfOddNumbers([11, 22, 33, 44, 55]) => [0, 2, 4]
  */
-function getIndicesOfOddNumbers(/* numbers */) {
-  throw new Error('Not implemented');
+function getIndicesOfOddNumbers(numbers) {
+  const result2 = [];
+  const result = numbers.filter((elem, index) => {
+    if (elem % 2 !== 0) {
+      result2.push(index);
+    }
+    return elem;
+  });
+  result.length = 10;
+  return result2;
 }
 
 /**
@@ -498,8 +526,9 @@ function getMaxItems(/* arr, n */) {
  *    findCommonElements(['a', 'b', 'c'], ['b', 'c', 'd']) => [ 'b', 'c' ]
  *    findCommonElements([1, 2, 3], ['a', 'b', 'c']) => []
  */
-function findCommonElements(/* arr1, arr2 */) {
-  throw new Error('Not implemented');
+function findCommonElements(arr1, arr2) {
+  const result = arr1.filter((elem) => arr2.includes(elem));
+  return result;
 }
 
 /**
