@@ -21,13 +21,12 @@
  *    getIntervalArray(3, 3) => [ 3 ]
  */
 function getIntervalArray(start, end) {
-  const arr = [];
-  arr.length = end - start + 1;
-  arr.fill(0);
-  const arr2 = arr.map((elem, index) => {
-    return start + index;
+  let counter = start - 1;
+  const newArr = Array.from(new Array(end - start + 1).fill(0), (x) => {
+    counter += 1;
+    return x + counter;
   });
-  return arr2;
+  return newArr;
 }
 
 /**
@@ -46,17 +45,17 @@ function getIntervalArray(start, end) {
 function sumArrays(arr1, arr2) {
   const arr1Copy = arr1;
   const arr2Copy = arr2;
-  if (arr1.length > arr2.length) {
-    for (let i = 0; i < arr2.length; i += 1) {
-      arr1Copy[i] += arr2Copy[i];
-    }
-  } else {
-    for (let i = 0; i < arr1.length; i += 1) {
-      arr2Copy[i] += arr1Copy[i];
-    }
-    return arr2Copy;
+  let result;
+  if (arr1Copy.length > arr2Copy.length) {
+    result = arr1Copy.map((elem, index) => elem + (arr2Copy[index] || 0));
+    return result;
   }
-  return arr1Copy;
+  if (arr1Copy.length < arr2Copy.length) {
+    result = arr2Copy.map((elem, index) => elem + (arr1Copy[index] || 0));
+    return result;
+  }
+  result = arr2Copy.map((elem, index) => elem + (arr1Copy[index] || 0));
+  return result;
 }
 /**
  * Returns an index of the specified element in array or -1 if element is not found.
@@ -89,11 +88,8 @@ function findElement(arr, value) {
  *    findAllOccurrences([ true, 0, 1, 'true' ], true) => 1
  */
 function findAllOccurrences(arr, item) {
-  let counter = 0;
-  arr.forEach((element) => {
-    if (element === item) counter += 1;
-  });
-  return counter;
+  const newArr = arr.filter((element) => element === item);
+  return newArr.length;
 }
 
 /**
@@ -180,9 +176,7 @@ function isSameLength(arr) {
  *    isValueEqualsIndex([10, 20, 30, 40, 50]) => false
  */
 function isValueEqualsIndex(arr) {
-  const result = arr.filter((elem, index) => elem === index);
-  if (result.length) return true;
-  return false;
+  return arr.some((elem, index) => elem === index);
 }
 
 /**
@@ -278,13 +272,8 @@ function toStringList(arr) {
  *   distinct([]) => []
  */
 function distinct(arr) {
-  const arrCopy = [];
-  arr.forEach((element) => {
-    if (!arrCopy.includes(element)) {
-      arrCopy.push(element);
-    }
-  });
-  return arrCopy;
+  const newArr = [...new Set(arr)];
+  return newArr;
 }
 
 /**
@@ -300,8 +289,16 @@ function distinct(arr) {
  *    createNDimensionalArray(4, 2) => [[[[0, 0], [0, 0]], [[0, 0], [0, 0]]], [[[0, 0], [0, 0]], [[0, 0], [0, 0]]]]
  *    createNDimensionalArray(1, 1) => [0]
  */
-function createNDimensionalArray(/* n, size */) {
-  throw new Error('Not implemented');
+function createNDimensionalArray(n, size) {
+  const depthh = n;
+  const lenArrr = size;
+  function create(depth, lenArr) {
+    if (n === 1) {
+      return Array(lenArr).fill(0);
+    }
+    return Array(lenArr).fill(createNDimensionalArray(depth - 1, lenArr));
+  }
+  return create(depthh, lenArrr);
 }
 
 /**
@@ -375,8 +372,16 @@ function calculateBalance(arr) {
  *    createChunks(['a', 'b', 'c', 'd', 'e'], 2) => [['a', 'b'], ['c', 'd'], ['e']]
  *    createChunks([10, 20, 30, 40, 50], 1) => [[10], [20], [30], [40], [50]]
  */
-function createChunks(/* arr, chunkSize */) {
-  throw new Error('Not implemented');
+function createChunks(arr, chunkSize) {
+  const copyArr = [...arr];
+  let len = 0 - chunkSize;
+  const round = Math.ceil(arr.length / chunkSize); // количество вложенных массивов
+  const result = new Array(round).fill(0);
+  const result2 = result.map((elem) => {
+    len += chunkSize + elem;
+    return copyArr.slice(len, len + chunkSize);
+  });
+  return result2;
 }
 
 /**
@@ -455,8 +460,14 @@ function getFalsyValuesCount(arr) {
  *                              [0,0,0,1,0],
  *                              [0,0,0,0,1]]
  */
-function getIdentityMatrix(/* n */) {
-  throw new Error('Not implemented');
+function getIdentityMatrix(n) {
+  const newArr = new Array(n).fill(0);
+  const result = newArr.map((elem, index) => {
+    const row = new Array(n).fill(elem);
+    row[index] = 1;
+    return row;
+  });
+  return result;
 }
 
 /**
@@ -548,8 +559,28 @@ function findCommonElements(arr1, arr2) {
  *    findLongestIncreasingSubsequence([3, 10, 2, 1, 20]) => 2
  *    findLongestIncreasingSubsequence([50, 3, 10, 7, 40, 80]) => 3
  */
-function findLongestIncreasingSubsequence(/* nums */) {
-  throw new Error('Not implemented');
+function findLongestIncreasingSubsequence(nums) {
+  const testArr = [];
+  let counter = nums[0]; // 50
+  const copyNums = nums.slice(1); // [3, 10, 7, 40, 80]
+  let result = 1;
+  const newArr = copyNums.map((elem, index) => {
+    if (elem > counter) {
+      counter = elem;
+      result += 1;
+      if (index === copyNums.length - 1) {
+        testArr.push(result);
+      }
+      return elem;
+    }
+    counter = elem;
+    testArr.push(result);
+    result = 1;
+    return elem;
+  });
+  newArr.length = 8;
+  testArr.sort((a, b) => a - b).reverse();
+  return testArr[0];
 }
 
 /**
